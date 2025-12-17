@@ -31,11 +31,7 @@ public class CarrierService {
 	}
 
 	public ResponseEntity<ResponseStructure<Carrier>> findCarrier(long mobileno) {
-		Carrier c = cr.findBymobileno(mobileno);
-		if(c==null)
-		{
-			throw new CarrierNotFoundException();
-		}
+		Carrier c = cr.findBymobileno(mobileno).orElseThrow(()->new CarrierNotFoundException());
 		ResponseStructure<Carrier> rs = new ResponseStructure<Carrier>();
 		rs.setStatuscode(HttpStatus.FOUND.value());
 		rs.setMessage("Carrier with mobileno:"+mobileno+"found");
@@ -44,11 +40,7 @@ public class CarrierService {
 	}
 
 	public ResponseEntity<ResponseStructure<String>> deleteCarrier(long mobileno) {
-		Carrier c = cr.findBymobileno(mobileno);
-		if(c==null)
-		{
-			throw new CarrierNotFoundException();
-		}
+		Carrier c = cr.findBymobileno(mobileno).orElseThrow(()->new CarrierNotFoundException());
 		cr.delete(c);
 		ResponseStructure<String> rs = new ResponseStructure<String>();
 		rs.setStatuscode(HttpStatus.OK.value());
@@ -56,7 +48,5 @@ public class CarrierService {
 		rs.setData("Carrier with mobileno:"+mobileno+"deleted");
 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.OK);
 	}
-	
-	
 	
 }

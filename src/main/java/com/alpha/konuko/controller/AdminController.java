@@ -46,7 +46,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/addnewAddress")
-	public ResponseEntity<ResponseStructure<Admin>> addnewAddress(@RequestBody Address address,@RequestParam long mobileno)
+	public ResponseEntity<ResponseStructure<Admin>> addnewAddress(@RequestBody Address address,@RequestParam long mobileno) throws AdminNotFoundException
 	{
 		return as.addnewAddress(address,mobileno);
 	}
@@ -98,7 +98,4 @@ public class AdminController {
 	{
 		return ps.updateProductavailabilityStatus(id,status);
 	}
-	
-	
-	
 }

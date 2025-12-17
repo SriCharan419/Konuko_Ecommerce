@@ -1,5 +1,6 @@
 package com.alpha.konuko.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -18,11 +19,11 @@ public class Customer {
 	private long mobileno;
 	private String mail;
 	@OneToMany
-	private List<Address> alist;
+	private List<Address> alist=new ArrayList<Address>();
 	@OneToMany
 	private List<Order> olist;
 	@OneToMany
-	private List<Product> cart;
+	private List<Product> cart=new ArrayList<Product>();
 	public int getId() {
 		return id;
 	}

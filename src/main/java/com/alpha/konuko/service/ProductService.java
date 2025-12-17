@@ -27,6 +27,7 @@ public class ProductService {
 		p.setPriceperunit(spdto.getPriceperunit());
 		p.setBrandname(spdto.getBrandname());
 		p.setDescription(spdto.getDescription());
+		p.setAvailabilitystatus("Available");
 		pr.save(p);
 		ResponseStructure<Product> rs = new ResponseStructure<Product>();
 		rs.setStatuscode(HttpStatus.CREATED.value());

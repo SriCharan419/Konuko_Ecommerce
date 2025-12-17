@@ -41,4 +41,24 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(CustomerNotFoundException.class)
+	public ResponseEntity<ResponseStructure<String>> customerNotFoundExceptionHandler(CustomerNotFoundException e)
+	{
+		ResponseStructure<String> rs = new ResponseStructure<String>();
+		rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+		rs.setMessage("Customer NOT FOUND");
+		rs.setData("Customer NOT FOUND");
+		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(NoAvailableProductsException.class)
+	public ResponseEntity<ResponseStructure<String>> noAvailableProductsExceptionHandler(NoAvailableProductsException e)
+	{
+		ResponseStructure<String> rs = new ResponseStructure<String>();
+		rs.setStatuscode(HttpStatus.OK.value());
+		rs.setMessage("No available products");
+		rs.setData("No available products");
+		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.OK);
+	}
+	
 }

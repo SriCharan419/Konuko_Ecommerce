@@ -37,8 +37,8 @@ public class AdminService {
 		return new ResponseEntity<ResponseStructure<Admin>>(rs,HttpStatus.CREATED);
 	}
 
-	public ResponseEntity<ResponseStructure<Admin>> addnewAddress(Address address, long mobileno) {
-		Admin a = ar.findByMobileno(mobileno);
+	public ResponseEntity<ResponseStructure<Admin>> addnewAddress(Address address, long mobileno) throws AdminNotFoundException {
+		Admin a = ar.findByMobileno(mobileno).orElseThrow(()->new AdminNotFoundException());
 		a.getAlist().add(address);
 		adr.save(address);
 		ar.save(a);
@@ -50,11 +50,7 @@ public class AdminService {
 	}
 
 	public ResponseEntity<ResponseStructure<String>> deleteAddress(long mobileno, int addressid) throws AdminNotFoundException {
-		Admin a = ar.findByMobileno(mobileno);
-		if(a==null)
-		{
-			throw new AdminNotFoundException();
-		}
+		Admin a = ar.findByMobileno(mobileno).orElseThrow(()-> new AdminNotFoundException());
 		List<Address> adlist = a.getAlist();
 		Address a1=new Address();
 		for(Address ad: adlist)
@@ -75,11 +71,7 @@ public class AdminService {
 	}
 
 	public ResponseEntity<ResponseStructure<Admin>> deleteAdmin(long mobileno) throws AdminNotFoundException {
-		Admin a = ar.findByMobileno(mobileno);
-		if(a==null)
-		{
-			throw new AdminNotFoundException();
-		}
+		Admin a = ar.findByMobileno(mobileno).orElseThrow(()-> new AdminNotFoundException());
 		ar.delete(a);
 		ResponseStructure<Admin> rs = new ResponseStructure<Admin>();
 		rs.setStatuscode(HttpStatus.OK.value());
