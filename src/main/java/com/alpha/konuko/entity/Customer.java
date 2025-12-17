@@ -3,6 +3,8 @@ package com.alpha.konuko.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,10 +21,13 @@ public class Customer {
 	private long mobileno;
 	private String mail;
 	@OneToMany
+	@JsonIgnore
 	private List<Address> alist=new ArrayList<Address>();
 	@OneToMany
+	@JsonIgnore
 	private List<Order> olist;
 	@OneToMany
+	@JsonIgnore
 	private List<Product> cart=new ArrayList<Product>();
 	public int getId() {
 		return id;

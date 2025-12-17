@@ -1,12 +1,15 @@
 package com.alpha.konuko.entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -17,19 +20,24 @@ public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	@OneToMany
-	private List<Product> purchaselist;
+	@ManyToMany
+	@JoinTable(
+	    name = "orders_purchaselist",
+	    joinColumns = @JoinColumn(name = "order_id"),
+	    inverseJoinColumns = @JoinColumn(name = "purchaselist_id")
+	)
+	private List<Product> purchaseLists;
 	@OneToOne
 	private Customer customer;
 	@OneToOne
 	private Carrier carrier;
-	private String orderstatus;
-	private String date;
+	private String orderstatus="PENDING";
+	private LocalDate date;
 	@OneToOne
 	private Address pickuploc;
 	@OneToOne
 	private Address deliveryloc;
-	private String expecteddeliverydate;
+	private LocalDate expecteddeliverydate;
 	private double totalprice;
 	public int getId() {
 		return id;
@@ -37,11 +45,11 @@ public class Order {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public List<Product> getPurchaselist() {
-		return purchaselist;
+	public List<Product> getPurchaseLists() {
+		return purchaseLists;
 	}
-	public void setPurchaselist(List<Product> purchaselist) {
-		this.purchaselist = purchaselist;
+	public void setPurchaseLists(List<Product> purchaseLists) {
+		this.purchaseLists = purchaseLists;
 	}
 	public Customer getCustomer() {
 		return customer;
@@ -61,10 +69,10 @@ public class Order {
 	public void setOrderstatus(String orderstatus) {
 		this.orderstatus = orderstatus;
 	}
-	public String getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
-	public void setDate(String date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 	public Address getPickuploc() {
@@ -79,10 +87,10 @@ public class Order {
 	public void setDeliveryloc(Address deliveryloc) {
 		this.deliveryloc = deliveryloc;
 	}
-	public String getExpecteddeliverydate() {
+	public LocalDate getExpecteddeliverydate() {
 		return expecteddeliverydate;
 	}
-	public void setExpecteddeliverydate(String expecteddeliverydate) {
+	public void setExpecteddeliverydate(LocalDate expecteddeliverydate) {
 		this.expecteddeliverydate = expecteddeliverydate;
 	}
 	public double getTotalprice() {
@@ -91,10 +99,11 @@ public class Order {
 	public void setTotalprice(double totalprice) {
 		this.totalprice = totalprice;
 	}
-	public Order(List<Product> purchaselist, Customer customer, Carrier carrier, String orderstatus,
-			String date, Address pickuploc, Address deliveryloc, String expecteddeliverydate, double totalprice) {
+	public Order(int id, List<Product> purchaseLists, Customer customer, Carrier carrier, String orderstatus,
+			LocalDate date, Address pickuploc, Address deliveryloc, LocalDate expecteddeliverydate, double totalprice) {
 		super();
-		this.purchaselist = purchaselist;
+		this.id = id;
+		this.purchaseLists = purchaseLists;
 		this.customer = customer;
 		this.carrier = carrier;
 		this.orderstatus = orderstatus;
@@ -109,8 +118,9 @@ public class Order {
 	}
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", purchaselist=" + purchaselist + ", customer=" + customer + ", carrier=" + carrier
-				+ ", orderstatus=" + orderstatus + ", date=" + date + ", pickuploc=" + pickuploc + ", deliveryloc="
-				+ deliveryloc + ", expecteddeliverydate=" + expecteddeliverydate + ", totalprice=" + totalprice + "]";
+		return "Order [id=" + id + ", purchaseLists=" + purchaseLists + ", customer=" + customer + ", carrier="
+				+ carrier + ", orderstatus=" + orderstatus + ", date=" + date + ", pickuploc=" + pickuploc
+				+ ", deliveryloc=" + deliveryloc + ", expecteddeliverydate=" + expecteddeliverydate + ", totalprice="
+				+ totalprice + "]";
 	}
 }

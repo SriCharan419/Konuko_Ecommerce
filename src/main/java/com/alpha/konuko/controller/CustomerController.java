@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import com.alpha.konuko.ResponseStructure;
 import com.alpha.konuko.dto.RegCustomerDTO;
 import com.alpha.konuko.entity.Address;
 import com.alpha.konuko.entity.Customer;
+import com.alpha.konuko.entity.Order;
 import com.alpha.konuko.entity.Product;
 import com.alpha.konuko.service.CustomerService;
 
@@ -54,5 +56,23 @@ public class CustomerController {
 	public ResponseEntity<ResponseStructure<Product>> addproducttocart(@RequestParam long mobileno,@RequestParam int prodid)
 	{
 		return cs.addproducttocart(mobileno,prodid);
+	}
+	
+	@GetMapping("/seecart")
+	public ResponseEntity<ResponseStructure<List<Product>>> seecart(@RequestParam long mobileno)
+	{
+		return cs.seecart(mobileno);
+	}
+	
+	@PatchMapping("/removeproductfromcart")
+	public ResponseEntity<ResponseStructure<List<Product>>> removeproductfromcart(@RequestParam long mobileno,@RequestParam int prodid)
+	{
+		return cs.removeproductfromcart(mobileno,prodid);
+	}
+	
+	@PostMapping("/placeorder")
+	public ResponseEntity<ResponseStructure<Order>> placeorder(@RequestParam long mobileno,@RequestParam int deliveryaddid)
+	{
+		return cs.placeorder(mobileno,deliveryaddid);
 	}
 }
