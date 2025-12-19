@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -20,8 +19,7 @@ public class Admin {
 	private String name;
 	private long mobileno;
 	private String mail;
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "admin_id")
+	@OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Address> alist = new ArrayList<>();
 	public int getId() {
 		return id;
@@ -53,8 +51,9 @@ public class Admin {
 	public void setAlist(List<Address> alist) {
 		this.alist = alist;
 	}
-	public Admin(String name, long mobileno, String mail, List<Address> alist) {
+	public Admin(int id, String name, long mobileno, String mail, List<Address> alist) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.mobileno = mobileno;
 		this.mail = mail;

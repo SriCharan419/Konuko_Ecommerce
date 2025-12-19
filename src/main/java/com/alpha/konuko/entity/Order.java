@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,18 +27,23 @@ public class Order {
 	    inverseJoinColumns = @JoinColumn(name = "purchaselist_id")
 	)
 	private List<Product> purchaseLists;
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name = "customer_id")
 	private Customer customer;
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name = "carrier_id")
 	private Carrier carrier;
 	private String orderstatus="PENDING";
 	private LocalDate date;
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name = "pickuploc_id")
 	private Address pickuploc;
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name = "deliveryloc_id")
 	private Address deliveryloc;
 	private LocalDate expecteddeliverydate;
 	private double totalprice;
+	private int otp;
 	public int getId() {
 		return id;
 	}
@@ -99,8 +104,15 @@ public class Order {
 	public void setTotalprice(double totalprice) {
 		this.totalprice = totalprice;
 	}
+	public int getOtp() {
+		return otp;
+	}
+	public void setOtp(int otp) {
+		this.otp = otp;
+	}
 	public Order(int id, List<Product> purchaseLists, Customer customer, Carrier carrier, String orderstatus,
-			LocalDate date, Address pickuploc, Address deliveryloc, LocalDate expecteddeliverydate, double totalprice) {
+			LocalDate date, Address pickuploc, Address deliveryloc, LocalDate expecteddeliverydate, double totalprice,
+			int otp) {
 		super();
 		this.id = id;
 		this.purchaseLists = purchaseLists;
@@ -112,6 +124,7 @@ public class Order {
 		this.deliveryloc = deliveryloc;
 		this.expecteddeliverydate = expecteddeliverydate;
 		this.totalprice = totalprice;
+		this.otp = otp;
 	}
 	public Order() {
 		super();
@@ -121,6 +134,6 @@ public class Order {
 		return "Order [id=" + id + ", purchaseLists=" + purchaseLists + ", customer=" + customer + ", carrier="
 				+ carrier + ", orderstatus=" + orderstatus + ", date=" + date + ", pickuploc=" + pickuploc
 				+ ", deliveryloc=" + deliveryloc + ", expecteddeliverydate=" + expecteddeliverydate + ", totalprice="
-				+ totalprice + "]";
+				+ totalprice + ", otp=" + otp + "]";
 	}
 }

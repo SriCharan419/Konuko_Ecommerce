@@ -5,10 +5,14 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -20,15 +24,20 @@ public class Customer {
 	private String name;
 	private long mobileno;
 	private String mail;
-	@OneToMany
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Address> alist=new ArrayList<Address>();
-	@OneToMany
+	@OneToMany(mappedBy = "customer")
 	@JsonIgnore
-	private List<Order> olist;
-	@OneToMany
+	private List<Order> olist = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(
+	    name = "customer_cart",
+	    joinColumns = @JoinColumn(name = "customer_id"),
+	    inverseJoinColumns = @JoinColumn(name = "product_id")
+	)
 	@JsonIgnore
-	private List<Product> cart=new ArrayList<Product>();
+	private List<Product> cart = new ArrayList<>();
 	public int getId() {
 		return id;
 	}
@@ -71,9 +80,10 @@ public class Customer {
 	public void setCart(List<Product> cart) {
 		this.cart = cart;
 	}
-	public Customer(String name, long mobileno, String mail, List<Address> alist, List<Order> olist,
+	public Customer(int id, String name, long mobileno, String mail, List<Address> alist, List<Order> olist,
 			List<Product> cart) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.mobileno = mobileno;
 		this.mail = mail;

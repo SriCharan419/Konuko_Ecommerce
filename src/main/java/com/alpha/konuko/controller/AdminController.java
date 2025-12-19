@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alpha.konuko.ResponseStructure;
+import com.alpha.konuko.dto.AddressDTO;
 import com.alpha.konuko.dto.AdminDTO;
 import com.alpha.konuko.dto.CarrierDTO;
 import com.alpha.konuko.dto.SaveProductDTO;
@@ -46,9 +47,9 @@ public class AdminController {
 	}
 	
 	@PostMapping("/addnewAddress")
-	public ResponseEntity<ResponseStructure<Admin>> addnewAddress(@RequestBody Address address,@RequestParam long mobileno) throws AdminNotFoundException
+	public ResponseEntity<ResponseStructure<Address>> addnewAddress(@RequestBody AddressDTO adto,@RequestParam long mobileno) throws AdminNotFoundException
 	{
-		return as.addnewAddress(address,mobileno);
+		return as.addnewAddress(adto,mobileno);
 	}
 	
 	@PutMapping("updateAdmin/deleteAddress")
@@ -87,7 +88,7 @@ public class AdminController {
 		return ps.addnewProduct(spdto);
 	}
 	
-	@PostMapping("/findallProducts")
+	@GetMapping("/findallProducts")
 	public ResponseEntity<ResponseStructure<List<Product>>> findallProducts()
 	{
 		return ps.findallProducts();
@@ -97,5 +98,11 @@ public class AdminController {
 	public ResponseEntity<ResponseStructure<Product>> updateProductavailabilityStatus(@RequestParam int id,@RequestParam String status)
 	{
 		return ps.updateProductavailabilityStatus(id,status);
+	}
+	
+	@PutMapping("/updateOrder/assignCarrier")
+	public ResponseEntity<ResponseStructure<String>> assignCarrier(@RequestParam int orderid,@RequestParam long carriermobileno,@RequestParam int addid)
+	{
+		return as.assignCarrier(orderid,carriermobileno,addid);
 	}
 }

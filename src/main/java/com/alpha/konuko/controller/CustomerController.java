@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alpha.konuko.ResponseStructure;
+import com.alpha.konuko.dto.AddressDTO;
 import com.alpha.konuko.dto.RegCustomerDTO;
 import com.alpha.konuko.entity.Address;
 import com.alpha.konuko.entity.Customer;
@@ -35,13 +36,13 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/addaddress")
-	public ResponseEntity<ResponseStructure<Address>> addaddress(@RequestParam long mobileno,@RequestBody Address add)
+	public ResponseEntity<ResponseStructure<Address>> addaddress(@RequestParam long mobileno,@RequestBody AddressDTO adto)
 	{
-		return cs.addaddress(mobileno,add);
+		return cs.addaddress(mobileno,adto);
 	}
 	
 	@DeleteMapping("/deleteaddress")
-	public ResponseEntity<ResponseStructure<Address>> deleteaddress(@RequestParam long mobileno,@RequestParam int addid)
+	public ResponseEntity<ResponseStructure<String>> deleteaddress(@RequestParam long mobileno,@RequestParam int addid)
 	{
 		return cs.deleteaddress(mobileno,addid);
 	}
@@ -75,4 +76,5 @@ public class CustomerController {
 	{
 		return cs.placeorder(mobileno,deliveryaddid);
 	}
+	
 }

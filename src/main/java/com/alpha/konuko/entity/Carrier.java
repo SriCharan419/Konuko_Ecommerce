@@ -1,6 +1,9 @@
 package com.alpha.konuko.entity;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,8 +21,9 @@ public class Carrier {
 	private long mobileno;
 	private String mailid;
 	private int capacity;
-	@OneToMany
-	private List<Order> olist;
+	@OneToMany(mappedBy = "carrier")
+	@JsonIgnore
+	private List<Order> olist=new ArrayList<>();
 	public int getId() {
 		return id;
 	}
@@ -56,8 +60,9 @@ public class Carrier {
 	public void setOlist(List<Order> olist) {
 		this.olist = olist;
 	}
-	public Carrier(String name, long mobileno, String mailid, int capacity, List<Order> olist) {
+	public Carrier(int id, String name, long mobileno, String mailid, int capacity, List<Order> olist) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.mobileno = mobileno;
 		this.mailid = mailid;

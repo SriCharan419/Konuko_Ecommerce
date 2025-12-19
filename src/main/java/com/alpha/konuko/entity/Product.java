@@ -66,9 +66,10 @@ public class Product {
 	public void setAvailabilitystatus(String availabilitystatus) {
 		this.availabilitystatus = availabilitystatus;
 	}
-	public Product(String name, int quantity, String category, double priceperunit, String brandname,
+	public Product(int id, String name, int quantity, String category, double priceperunit, String brandname,
 			String description, String availabilitystatus) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.quantity = quantity;
 		this.category = category;

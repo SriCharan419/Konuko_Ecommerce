@@ -1,9 +1,13 @@
 package com.alpha.konuko.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Address {
@@ -18,6 +22,14 @@ public class Address {
 	private String addressdescription;
 	private long mobileno;
 	private String addresstype;
+	@ManyToOne
+	@JoinColumn(name = "admin_id",nullable = true)
+	@JsonIgnore
+	private Admin admin;
+	@ManyToOne
+	@JoinColumn(name = "customer_id",nullable = true)
+	@JsonIgnore
+	private Customer customer;
 	public int getId() {
 		return id;
 	}
@@ -66,9 +78,22 @@ public class Address {
 	public void setAddresstype(String addresstype) {
 		this.addresstype = addresstype;
 	}
-	public Address(String city, int pincode, String state, String country, String addressdescription,
-			long mobileno, String addresstype) {
+	public Admin getAdmin() {
+		return admin;
+	}
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+	public Customer getCustomer() {
+		return customer;
+	}
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+	public Address(int id, String city, int pincode, String state, String country, String addressdescription,
+			long mobileno, String addresstype, Admin admin, Customer customer) {
 		super();
+		this.id = id;
 		this.city = city;
 		this.pincode = pincode;
 		this.state = state;
@@ -76,6 +101,8 @@ public class Address {
 		this.addressdescription = addressdescription;
 		this.mobileno = mobileno;
 		this.addresstype = addresstype;
+		this.admin = admin;
+		this.customer = customer;
 	}
 	public Address() {
 		super();
@@ -84,6 +111,6 @@ public class Address {
 	public String toString() {
 		return "Address [id=" + id + ", city=" + city + ", pincode=" + pincode + ", state=" + state + ", country="
 				+ country + ", addressdescription=" + addressdescription + ", mobileno=" + mobileno + ", addresstype="
-				+ addresstype + "]";
+				+ addresstype + ", admin=" + admin + ", customer=" + customer + "]";
 	}
 }

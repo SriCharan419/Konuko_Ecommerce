@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.alpha.konuko.ResponseStructure;
+import com.alpha.konuko.dto.AddressDTO;
 import com.alpha.konuko.dto.RegCustomerDTO;
 import com.alpha.konuko.entity.Address;
 import com.alpha.konuko.entity.Customer;
@@ -30,7 +31,7 @@ public class CustomerService {
 	private CustomerRepo cr;
 	
 	@Autowired
-	private AddressRepo ar;
+	private AddressRepo adr;
 	
 	@Autowired
 	private ProductRepo pr;
@@ -43,8 +44,6 @@ public class CustomerService {
 		c.setName(rdto.getName());
 		c.setMobileno(rdto.getMobileno());
 		c.setMail(rdto.getMail());
-		c.getAlist().add(rdto.getAdd());
-		ar.save(rdto.getAdd());
 		cr.save(c);
 		
 		ResponseStructure<Customer> rs = new ResponseStructure<Customer>();
@@ -54,11 +53,21 @@ public class CustomerService {
 		return new ResponseEntity<ResponseStructure<Customer>>(rs,HttpStatus.CREATED);
 	}
 
-	public ResponseEntity<ResponseStructure<Address>> addaddress(long mobileno, Address add) {
+	public ResponseEntity<ResponseStructure<Address>> addaddress(long mobileno, AddressDTO adto) 
+	{
 		Customer c = cr.findBymobileno(mobileno).orElseThrow(()->new CustomerNotFoundException());
+		Address add = new Address();
+		add.setCity(adto.getCity());
+		add.setPincode(adto.getPincode());
+		add.setState(adto.getState());
+		add.setCountry(adto.getCountry());
+		add.setAddressdescription(adto.getAddressdescription());
+		add.setMobileno(adto.getMobileno());
+		add.setAddresstype(adto.getAddresstype());
+		add.setCustomer(c);
 		c.getAlist().add(add);
-		ar.save(add);
 		cr.save(c);
+		adr.saveAndFlush(add);
 		ResponseStructure<Address> rs = new ResponseStructure<Address>();
 		rs.setStatuscode(HttpStatus.OK.value());
 		rs.setMessage("Customer address added");
@@ -66,7 +75,7 @@ public class CustomerService {
 		return new ResponseEntity<ResponseStructure<Address>>(rs,HttpStatus.OK);
 	}
 
-	public ResponseEntity<ResponseStructure<Address>> deleteaddress(long mobileno, int addid) {
+	public ResponseEntity<ResponseStructure<String>> deleteaddress(long mobileno, int addid) {
 		Customer c = cr.findBymobileno(mobileno).orElseThrow(()->new CustomerNotFoundException());
 		List<Address> alist = c.getAlist();
 		Address add = new Address();
@@ -79,16 +88,17 @@ public class CustomerService {
 			}
 		}
 		c.getAlist().remove(add);
-		ar.delete(add);
+		adr.delete(add);
 		cr.save(c);
-		ResponseStructure<Address> rs = new ResponseStructure<Address>();
+		ResponseStructure<String> rs = new ResponseStructure<String>();
 		rs.setStatuscode(HttpStatus.OK.value());
 		rs.setMessage("Customer address deleted");
-		rs.setData(add);
-		return new ResponseEntity<ResponseStructure<Address>>(rs,HttpStatus.OK);
+		rs.setData("Customer address deleted");
+		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.OK);
 	}
 
-	public ResponseEntity<ResponseStructure<List<Product>>> seeallavailableproducts() {
+	public ResponseEntity<ResponseStructure<List<Product>>> seeallavailableproducts() 
+	{
 		List<Product> plist = pr.findByavailabilitystatus().orElseThrow(()->new NoAvailableProductsException());
 		ResponseStructure<List<Product>> rs = new ResponseStructure<List<Product>>();
 		rs.setStatuscode(HttpStatus.OK.value());
@@ -97,7 +107,8 @@ public class CustomerService {
 		return new ResponseEntity<ResponseStructure<List<Product>>>(rs,HttpStatus.OK);
 	}
 
-	public ResponseEntity<ResponseStructure<Product>> addproducttocart(long mobileno, int prodid) {
+	public ResponseEntity<ResponseStructure<Product>> addproducttocart(long mobileno, int prodid) 
+	{
 		Customer c = cr.findBymobileno(mobileno).orElseThrow(()->new CustomerNotFoundException());
 		Product p = pr.findById(prodid).orElseThrow(()->new ProductNotFoundException());
 		c.getCart().add(p);
@@ -167,6 +178,8 @@ public class CustomerService {
 			pr.save(p);
 		}
 		ord.setTotalprice(totalprice);
+		int otp = (int)(Math.random() * 9000) + 1000;
+		ord.setOtp(otp);
 		c.setCart(new ArrayList<Product>());
 		c.getOlist().add(ord);
 		or.save(ord);
@@ -177,5 +190,5 @@ public class CustomerService {
 		rs.setData(ord);
 		return new ResponseEntity<ResponseStructure<Order>>(rs,HttpStatus.OK);
 	}
-	
+
 }
